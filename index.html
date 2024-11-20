@@ -3,41 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>秘密結社総合本部作成リンク変更ツール</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>連投ツール</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #444;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea, input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f7f7f7;
+            color: #444;
+        }
+        button {
+            background-color: #888;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #666;
+        }
+        .output {
+            background-color: #f9f9f9;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 10px;
+            min-height: 100px;
+            margin: 10px 0;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+        footer {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>秘密結社総合本部作成リンク変更ツール</h1>
-            <p>リンクを入力して、希望の形式を選択してください。</p>
-        </header>
-        <main>
-            <div class="form-group">
-                <label for="input-link">変換したいリンクを入力:</label>
-                <input type="text" id="input-link" placeholder="例: https://line.me/ti/g2/xxxx">
-            </div>
-            <div class="form-group">
-                <label for="link-type">変換形式を選択:</label>
-                <select id="link-type">
-                    <option value="report">通報リンク</option>
-                    <option value="invite">招待リンク</option>
-                    <option value="join">参加リンク</option>
-                    <option value="browser">ブラウザ用リンク</option>
-                </select>
-            </div>
-            <button id="convert-btn">リンクを変換</button>
-            <div id="result" class="result">
-                <h2>変換結果:</h2>
-                <p id="converted-link">ここに変換されたリンクが表示されます</p>
-                <button id="copy-btn">リンクをコピー</button>
-            </div>
-        </main>
-        <footer>
-            <p>※このツールは開発者が責任を負いません。ご利用は自己責任でお願いします。</p>
-        </footer>
+        <h1>連投ツール</h1>
+        <textarea id="baseMessage" placeholder="送信したいメッセージ"></textarea>
+        <input type="text" id="variable" placeholder="変数 (例: 1, 2, 3...)">
+        <input type="number" id="repeatCount" placeholder="送信回数" min="1" max="100">
+        <button onclick="generateMessages()">メッセージ生成</button>
+        <textarea id="outputMessages" class="output" placeholder="生成されたメッセージ" readonly></textarea>
+        <button onclick="copyMessages()">コピーする</button>
     </div>
-    <script src="scripts.js"></script>
+
+    <footer>
+        <p>注意: このツールの使用によって生じた問題について、開発者は一切の責任を負いません。</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
 
