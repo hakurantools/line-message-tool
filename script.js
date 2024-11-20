@@ -1,43 +1,27 @@
-document.getElementById("convert-btn").addEventListener("click", () => {
-    const inputLink = document.getElementById("input-link").value.trim();
-    const linkType = document.getElementById("link-type").value;
+function generateMessages() {
+    const baseMessage = document.getElementById('baseMessage').value;
+    const variable = document.getElementById('variable').value.split(',');
+    const repeatCount = parseInt(document.getElementById('repeatCount').value, 10);
+    const outputMessages = document.getElementById('outputMessages');
 
-    let ticket = inputLink.match(/g2\/([a-zA-Z0-9_-]+)/);
-    if (!ticket || ticket.length < 2) {
-        alert("無効なリンク形式です。正しいリンクを入力してください。");
+    if (!baseMessage || !variable.length || isNaN(repeatCount)) {
+        alert("メッセージ、変数、または送信回数を正しく入力してください。");
         return;
     }
 
-    ticket = ticket[1];
-    let convertedLink;
+    let generatedMessages = "";
 
-    switch (linkType) {
-        case "report":
-            convertedLink = `line://square/report?ticket=${ticket}`;
-            break;
-        case "invite":
-            convertedLink = `line://square/ti/g2/${ticket}`;
-            break;
-        case "join":
-            convertedLink = `line://square/join?ticket=${ticket}`;
-            break;
-        case "browser":
-            convertedLink = `https://square-api.line.me/smw/v2/static/sm/html/#/squareCover/${ticket}`;
-            break;
-        default:
-            alert("形式を選択してください。");
-            return;
+    for (let i = 0; i < repeatCount; i++) {
+        const currentVariable = variable[i % variable.length]; // 繰り返し変数を利用
+        generatedMessages += baseMessage.replace(/\{var\}/g, currentVariable) + "\n";
     }
 
-    const resultDiv = document.getElementById("result");
-    const convertedLinkElement = document.getElementById("converted-link");
+    outputMessages.value = generatedMessages.trim();
+}
 
-    convertedLinkElement.textContent = convertedLink;
-    resultDiv.style.display = "block";
-
-    document.getElementById("copy-btn").addEventListener("click", () => {
-        navigator.clipboard.writeText(convertedLink)
-            .then(() => alert("リンクがコピーされました！"))
-            .catch(err => alert("コピーに失敗しました: " + err));
-    });
-});
+function copyMessages() {
+    const outputMessages = document.getElementById('outputMessages');
+    outputMessages.select();
+    document.execCommand('copy');
+    alert("生成されたメッセージをコピーしました！");
+}
