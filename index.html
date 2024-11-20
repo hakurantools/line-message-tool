@@ -3,82 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>連投ツール</title>
+    <title>変数を使ったメッセージ生成ツール</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            color: #444;
-            text-align: center;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
             margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
         .container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid #ddd;
             border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        textarea, input, button {
-            width: 100%;
-            margin: 10px 0;
+
+        input, button {
             padding: 10px;
             font-size: 1rem;
+            width: 100%;
+            margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #f7f7f7;
-            color: #444;
         }
+
         button {
-            background-color: #888;
+            background-color: #4CAF50;
             color: white;
-            border: none;
             cursor: pointer;
         }
+
         button:hover {
-            background-color: #666;
+            background-color: #45a049;
         }
-        .output {
+
+        #outputMessages {
+            margin-top: 20px;
+            width: 100%;
+            height: 200px;
+            font-size: 0.9rem;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             background-color: #f9f9f9;
             color: #333;
-            border: 1px solid #ddd;
-            padding: 10px;
-            min-height: 100px;
-            margin: 10px 0;
-            border-radius: 5px;
+            white-space: pre-wrap;
             word-wrap: break-word;
-        }
-        footer {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>連投ツール</h1>
-        <textarea id="baseMessage" placeholder="送信したいメッセージ"></textarea>
-        <input type="text" id="variable" placeholder="変数 (200)">
-        <input type="number" id="repeatCount" placeholder="送信回数" min="1" max="100">
-        <button onclick="generateMessages()">メッセージ生成</button>
-        <textarea id="outputMessages" class="output" placeholder="生成されたメッセージ" readonly></textarea>
+        <h1>変数を使ったメッセージ生成ツール</h1>
+        <label for="baseMessage">メッセージテンプレート:</label>
+        <input type="text" id="baseMessage" placeholder="例: こんにちは、{var}さん！" />
+        
+        <label for="variable">変数 (最大200個):</label>
+        <textarea id="variable" placeholder="変数をカンマ区切りで入力してください (例: John, Jane, Max)"></textarea>
+        
+        <label for="repeatCount">送信回数 (最大200回):</label>
+        <input type="number" id="repeatCount" value="1" min="1" max="200" />
+        
+        <button onclick="generateMessages()">メッセージを生成</button>
+        
+        <textarea id="outputMessages" readonly></textarea>
+        
         <button onclick="copyMessages()">コピーする</button>
     </div>
 
-    <footer>
-        <p>注意: このツールの使用によって生じた問題について、開発者は一切の責任を負いません。</p>
-    </footer>
+    <script>
+        function generateMessages() {
+            const baseMessage = document.getElementById('baseMessage').value;
+            let variable = document.getElementById('variable').value.split(',');
+            const repeatCount = parseInt(document.getElementById('repeatCount').value, 10);
+            const outputMessages = document.getElementById('outputMessages');
 
-    <script src="script.js"></script>
+            // 入力チェック
+            if (!baseMessage || variable.length === 0 || isNaN(repeatCount)) {
+                alert("メッセージ、変数、または送信回数を正しく入力してください。");
+                return;
+            }
+
+            // 変数の数を200に制限
+            if (variable.length > 200) {
+                alert("変数の数は最大200個までです。");
+                return;
+            }
+
+            // 送信回数の制限
+            if (repeatCount > 200) {
+                alert("送信回数は最大200回までです。");
+                return;
+            }
+
+            let generatedMessages = "";
+
+            for (let i = 0; i < repeatCount; i++) {
+                const currentVariable = variable[i % variable.length]; // 繰り返し変数を利用
+                generatedMessages += baseMessage.replace(/\{var\}/g, currentVariable) + "\n";
+            }
+
+            outputMessages.value = generatedMessages.trim();
+        }
+
+        function copyMessages() {
+            const outputMessages = document.getElementById('outputMessages');
+            outputMessages.select();
+            document.execCommand('copy');
+            alert("生成されたメッセージをコピーしました！");
+        }
+    </script>
 </body>
 </html>
-
